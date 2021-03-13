@@ -22,5 +22,17 @@
 		["@babel/plugin-transform-runtime", {
 			"version": "7.13.10"
 		}]
-	]
+	],
+	"overrides": [{
+		"include": ["**/src/**"],
+		"assumptions": {
+			"constantSuper": true,
+			"iterableIsArray": true,
+			"noClassCalls": true,
+			"privateFieldsAsProperties": true,
+			"setClassMethods": true,
+			"setPublicClassFields": true,
+			"superIsCallableConstructor": true
+		}
+	}]
 }
