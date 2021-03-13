@@ -7,8 +7,9 @@
 	"scripts": {
 		"build": "webpack",
 		"build:dev": "WEBPACK_MODE=development webpack",
-		"serve": "webpack serve",
-		"serve:dev": "WEBPACK_MODE=development webpack serve",
+		"start": "webpack serve",
+		"start:dev": "WEBPACK_MODE=development webpack serve",
+		"serve": "serve -u dist",
 		"watch": "webpack --watch",
 		"watch:dev": "WEBPACK_MODE=development webpack --watch"
 	},
@@ -24,6 +25,7 @@
 		"html-webpack-plugin": "^5.3.1",
 		"ignore-not-found-export-webpack-plugin": "^1.0.2",
 		"preact": "^10.5.12",
+		"serve": "^11.3.2",
 		"webpack": "^5.25.0",
 		"webpack-cli": "^4.5.0",
 		"webpack-dev-server": "^3.11.2"
