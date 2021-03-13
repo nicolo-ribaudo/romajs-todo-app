@@ -8,7 +8,8 @@ const stage3 = require("acorn-stage3");
 acorn.Parser = acorn.Parser.extend(stage3);
 
 module.exports = [
-	generateConfig({ babelEnv: "modern", devServer: true }),
+	generateConfig({ babelEnv: "public-fields", devServer: true }),
+	generateConfig({ babelEnv: "modern", devServer: false }),
 	generateConfig({
 		babelEnv: "legacy",
 		devServer: false,

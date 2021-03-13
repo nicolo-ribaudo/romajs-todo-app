@@ -9,6 +9,17 @@
 		<div id="main"></div>
 
 		<script nomodule defer="defer" src="./bundle.legacy.js"></script>
-		<script type="module" src="./bundle.modern.js"></script>
+
+		<script>
+			var path = "./bundle.modern.js";
+			try {
+				Function("class X { x = 2 }");
+				path = "./bundle.public-fields.js";
+			} catch (_) {}
+
+			if ("noModule" in document.createElement("script")) {
+				document.write("<script type='module' src='" + path + "'></" + "script>");
+			}
+		</script>
 	</body>
 </html>

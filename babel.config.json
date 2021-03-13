@@ -2,6 +2,9 @@
 	"env": {
 		"modern": {
 			"targets": { "esmodules": true }
+		},
+		"public-fields": {
+			"targets": "supports public-class-fields"
 		}
 	},
 	"presets": [
