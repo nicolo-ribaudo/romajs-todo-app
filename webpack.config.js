@@ -1,5 +1,4 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const IgnoreNotFoundExportPlugin = require("ignore-not-found-export-webpack-plugin");
 const path = require("path");
 
@@ -8,12 +7,11 @@ const acorn = require("acorn");
 const stage3 = require("acorn-stage3");
 acorn.Parser = acorn.Parser.extend(stage3);
 
-module.exports = {
-	mode: process.env.WEBPACK_MODE ?? "production",
-	entry: path.resolve(__dirname, "./src/main.js"),
-	output: {
-		filename: "bundle.js",
-		path: path.resolve(__dirname, "./dist"),
+module.exports = [
+	generateConfig({ babelEnv: "modern", devServer: true }),
+	generateConfig({
+		babelEnv: "legacy",
+		devServer: false,
 
 		// By default, webpack assumes modernish browsers and generates
 		// a bundles which contains some ES2015 syntax. We need to
@@ -24,36 +22,50 @@ module.exports = {
 			destructuring: false,
 			forOf: false,
 		},
-	},
-	devtool: "source-map",
-	module: {
-		rules: [
-			{
-				test: /\.html$/,
-				use: "html-loader",
-			},
-			{
-				test: /\.jsx?$/,
-				exclude: [/regenerator-runtime/, /core-js/],
-				use: {
-					loader: "babel-loader",
-					options: {
-						configFile: path.resolve(__dirname, "./babel.config.json"),
+	}),
+];
+
+function generateConfig({ babelEnv, devServer, environment }) {
+	return {
+		mode: process.env.WEBPACK_MODE ?? "production",
+		entry: path.resolve(__dirname, "./src/main.js"),
+		output: {
+			filename: `bundle.${babelEnv}.js`,
+			path: path.resolve(__dirname, "./dist"),
+			environment,
+		},
+		devtool: "source-map",
+		module: {
+			rules: [
+				{
+					test: /\.html$/,
+					use: "html-loader",
+				},
+				{
+					test: /\.jsx?$/,
+					exclude: [/regenerator-runtime/, /core-js/],
+					use: {
+						loader: "babel-loader",
+						options: {
+							configFile: path.resolve(__dirname, "./babel.config.json"),
+							envName: babelEnv,
+						},
 					},
 				},
-			},
+			],
+		},
+		plugins: [
+			new CopyWebpackPlugin({
+				patterns: [path.resolve(__dirname, "./src/index.html")],
+			}),
+			new IgnoreNotFoundExportPlugin(),
 		],
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(__dirname, "./src/index.html"),
-		}),
-		new CleanWebpackPlugin(),
-		new IgnoreNotFoundExportPlugin(),
-	],
-	devServer: {
-		contentBase: "./dist",
-		watchContentBase: true,
-		port: 8080,
-	},
-};
+		devServer: devServer
+			? {
+					contentBase: "./dist",
+					watchContentBase: true,
+					port: 8080,
+			  }
+			: undefined,
+	};
+}

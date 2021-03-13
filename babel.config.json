@@ -1,7 +1,13 @@
 {
+	"env": {
+		"modern": {
+			"targets": { "esmodules": true }
+		}
+	},
 	"presets": [
 		["@babel/preset-env", {
-			"shippedProposals": true
+			"shippedProposals": true,
+			"bugfixes": true
 		}],
 		["@babel/preset-react", {
 			"runtime": "automatic",
