@@ -1,5 +1,4 @@
 // Polyfills
-import "core-js";
 import "regenerator-runtime/runtime.js";
 
 import { render } from "preact";
